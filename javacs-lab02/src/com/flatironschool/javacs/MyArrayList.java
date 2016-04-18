@@ -12,7 +12,7 @@ import java.util.ListIterator;
 /**
  * @author downey
  * @param <E>: Type of the elements in the List.
- *
+ * Edited by Lindsey Gillaspie
  */
 public class MyArrayList<E> implements List<E> {
 	int size;                    // keeps track of the number of elements
@@ -62,7 +62,30 @@ public class MyArrayList<E> implements List<E> {
 		if (index < 0 || index > size) {
 			throw new IndexOutOfBoundsException();
 		}
-		// TODO: fill in the rest of this method
+		// TODO3: fill in the rest of this method
+		//Shifts the element currently at that position (if any) and any
+		//subsequent elements to the right (+1 to their indices)
+		if(array[index] == null)
+		{
+			array[index] = element;
+			size++;
+		}
+		else
+		{
+			size++;
+			if (size >= array.length){
+			  	// make a bigger array and copy over the elements
+			  	E[] bigger = (E[]) new Object[array.length+1];
+				System.arraycopy(array, 0, bigger, 0, array.length);
+			 	array = bigger;
+			}
+			for(int i = index; i < size; i++)
+			{
+				array[i++] = array[i];
+			}
+			E old = set(index, element);
+			//which is the same thing as: array[index] = element;
+		}
 	}
 
 	@Override
@@ -111,8 +134,25 @@ public class MyArrayList<E> implements List<E> {
 
 	@Override
 	public int indexOf(Object target) {
-		// TODO: fill in this method
-		return 0;
+		// TODO2: fill in this method
+		if(target == null)
+		{
+			for(int i = 0; i < size; i++)
+			{
+				if(array[i]==null)
+					return i;
+			}
+				
+		}
+		else {
+			for(int i = 0; i < size; i++)
+                        {									       		if(target.equals(array[i]))
+				return i;
+			}
+		}
+		// returns the index of 1st occurence of the specified element
+		// or -1 if this list does not contain the element
+		return -1;
 	}
 
 	/** Checks whether an element of the array is the target.
@@ -182,8 +222,26 @@ public class MyArrayList<E> implements List<E> {
 
 	@Override
 	public E remove(int index) {
-		// TODO: fill in this method.
-		return null;
+		// TODO4: fill in this method.
+		//Removes the element at the specified position in the list
+		//Shifts any subsequent elements to the left (-1 from indices)
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		E removed = array[index];
+		array[index] = null;
+		int tmp = index;
+		while(tmp < size)
+		{
+			array[tmp] = array[tmp+1];
+			array[tmp+1] = null;
+			tmp++;
+		}
+		size--;
+		
+		//Returns the element that was removed from the list
+		return removed;
 	}
 
 	@Override
@@ -202,8 +260,16 @@ public class MyArrayList<E> implements List<E> {
 
 	@Override
 	public E set(int index, E element) {
-		// TODO: fill in this method.
-		return null;
+		// TODO1: I filled in this method
+		//If the index is out of range, throw an exception
+		if(index < 0 || index >= size())
+		{
+			throw new IndexOutOfBoundsException();
+		}
+		E savedElement = array[index];
+		array[index] = element;
+		//return the element previously at the specified position
+		return savedElement;
 	}
 
 	@Override
